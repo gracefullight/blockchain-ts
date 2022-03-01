@@ -42,6 +42,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.4.1"],\
             ["@types/node", "npm:17.0.21"],\
             ["express", "npm:4.17.3"],\
+            ["express-validator", "npm:6.14.0"],\
             ["helmet", "npm:5.0.2"],\
             ["husky", "npm:7.0.4"],\
             ["jest", "virtual:5b6bdae6179eec5aa3322d8c2edd487e4b12da8f7a66aa4de8c780919e722576af5e84c0e42c44fd24c8e71a7c225b475d85a76d0e9878d92e7745a65fc78b59#npm:27.5.1"],\
@@ -2308,6 +2309,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/jest", "npm:27.4.1"],\
             ["@types/node", "npm:17.0.21"],\
             ["express", "npm:4.17.3"],\
+            ["express-validator", "npm:6.14.0"],\
             ["helmet", "npm:5.0.2"],\
             ["husky", "npm:7.0.4"],\
             ["jest", "virtual:5b6bdae6179eec5aa3322d8c2edd487e4b12da8f7a66aa4de8c780919e722576af5e84c0e42c44fd24c8e71a7c225b475d85a76d0e9878d92e7745a65fc78b59#npm:27.5.1"],\
@@ -3470,6 +3472,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["type-is", "npm:1.6.18"],\
             ["utils-merge", "npm:1.0.1"],\
             ["vary", "npm:1.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["express-validator", [\
+        ["npm:6.14.0", {\
+          "packageLocation": "./.yarn/cache/express-validator-npm-6.14.0-34a160ed56-e43ba1f18a.zip/node_modules/express-validator/",\
+          "packageDependencies": [\
+            ["express-validator", "npm:6.14.0"],\
+            ["lodash", "npm:4.17.21"],\
+            ["validator", "npm:13.7.0"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -7323,6 +7336,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["validate-npm-package-license", "npm:3.0.4"],\
             ["spdx-correct", "npm:3.1.1"],\
             ["spdx-expression-parse", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["validator", [\
+        ["npm:13.7.0", {\
+          "packageLocation": "./.yarn/cache/validator-npm-13.7.0-624277e841-2b83283de1.zip/node_modules/validator/",\
+          "packageDependencies": [\
+            ["validator", "npm:13.7.0"]\
           ],\
           "linkType": "HARD"\
         }]\

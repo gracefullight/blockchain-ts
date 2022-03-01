@@ -1710,6 +1710,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/node": ^17.0.21
     express: ^4.17.3
+    express-validator: ^6.14.0
     helmet: ^5.0.2
     husky: ^7.0.4
     jest: ^27.5.1
@@ -2654,6 +2655,16 @@ __metadata:
     jest-matcher-utils: ^27.5.1
     jest-message-util: ^27.5.1
   checksum: b2c66beb52de53ef1872165aace40224e722bca3c2274c54cfa74b6d617d55cf0ccdbf36783ccd64dbea501b280098ed33fd0b207d4f15bc03cd3c7a24364a6a
+  languageName: node
+  linkType: hard
+
+"express-validator@npm:^6.14.0":
+  version: 6.14.0
+  resolution: "express-validator@npm:6.14.0"
+  dependencies:
+    lodash: ^4.17.21
+    validator: ^13.7.0
+  checksum: e43ba1f18a4f02d784e44e13b1b43269a61f9d9283f31e51c230ff6d31591b3d67ad89e444a0941c0688bfd220049087e606bb61569c0eb8df2f118b866cfb43
   languageName: node
   linkType: hard
 
@@ -4183,7 +4194,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.7.0":
+"lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.21, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -6076,6 +6087,13 @@ __metadata:
     spdx-correct: ^3.0.0
     spdx-expression-parse: ^3.0.0
   checksum: 35703ac889d419cf2aceef63daeadbe4e77227c39ab6287eeb6c1b36a746b364f50ba22e88591f5d017bc54685d8137bc2d328d0a896e4d3fd22093c0f32a9ad
+  languageName: node
+  linkType: hard
+
+"validator@npm:^13.7.0":
+  version: 13.7.0
+  resolution: "validator@npm:13.7.0"
+  checksum: 2b83283de1222ca549a7ef57f46e8d49c6669213348db78b7045bce36a3b5843ff1e9f709ebf74574e06223461ee1f264f8cc9a26a0060a79a27de079d8286ef
   languageName: node
   linkType: hard
 

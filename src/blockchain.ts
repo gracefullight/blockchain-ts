@@ -1,8 +1,15 @@
 import type { Block, Transaction } from "./types";
 import { sha256 } from "./utils";
+
+export const GENESIS_BLOCK_HASH = "0".repeat(32);
+
 export class Blockchain {
   private chain: Block[] = [];
   private pendingTransactions: Transaction[] = [];
+
+  constructor() {
+    this.createNewBlock(100, GENESIS_BLOCK_HASH, GENESIS_BLOCK_HASH);
+  }
 
   public createNewBlock(
     nonce: number,
@@ -46,7 +53,10 @@ export class Blockchain {
     return hash;
   }
 
-  public proofOfWork(previousBlockHash: string, currentBlockData: Transaction[]) {
+  public proofOfWork(
+    previousBlockHash: string,
+    currentBlockData: Transaction[]
+  ) {
     let nonce = 0;
     let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
     while (hash.substring(0, 4) !== "0000") {

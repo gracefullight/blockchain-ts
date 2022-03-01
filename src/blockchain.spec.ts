@@ -1,8 +1,7 @@
-import { Blockchain } from "./blockchain";
+import { Blockchain, GENESIS_BLOCK_HASH } from "./blockchain";
 import { faker } from "@faker-js/faker";
 
 const NONCE = 0;
-const GENESIS_BLOCK_HASH = "0".repeat(32);
 
 describe("BlockChain", () => {
   let blockChain: Blockchain;
@@ -11,27 +10,19 @@ describe("BlockChain", () => {
   });
 
   describe("@createNewBlock", () => {
-    it("should be add genesis block", () => {
-      const hash = faker.git.commitSha();
-      const { timestamp, ...genesisBlockExceptTimestamp } =
-        blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
+    it("has genesis block", () => {
+      const genesisBlock = Reflect.get(blockChain, "chain")[0];
 
-      expect(genesisBlockExceptTimestamp).toEqual({
-        index: 1,
-        nonce: "gracefullight",
-        transactions: [],
-        hash,
-        previousBlockHash: GENESIS_BLOCK_HASH,
-      });
+      expect(genesisBlock).toHaveProperty("index", 1);
+      expect(genesisBlock).toHaveProperty("previousBlockHash", GENESIS_BLOCK_HASH);
+      expect(genesisBlock).toHaveProperty("hash", GENESIS_BLOCK_HASH);
     });
   });
 
   describe("@getLatestBlock", () => {
     it("should be return latest block", () => {
       const hash = faker.git.commitSha();
-      const secondBlockHash = faker.git.commitSha();
       blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
-      blockChain.createNewBlock(NONCE, hash, secondBlockHash);
 
       const { timestamp, ...lastBlockExceptTimestamp } =
         blockChain.getLastBlock();
@@ -39,8 +30,8 @@ describe("BlockChain", () => {
         index: 2,
         nonce: NONCE,
         transactions: [],
-        hash: secondBlockHash,
-        previousBlockHash: hash,
+        hash,
+        previousBlockHash: GENESIS_BLOCK_HASH,
       });
     });
   });
@@ -48,8 +39,6 @@ describe("BlockChain", () => {
   describe("@createNewTransaction", () => {
     it("should be add new transaction to the second (next) block", () => {
       const hash = faker.git.commitSha();
-      const secondBlockHash = faker.git.commitSha();
-      blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
       const nextBlockIndex = blockChain.createNewTransaction(
         1000,
         "gracefullight",
@@ -59,8 +48,8 @@ describe("BlockChain", () => {
 
       const { transactions } = blockChain.createNewBlock(
         NONCE,
-        hash,
-        secondBlockHash
+        GENESIS_BLOCK_HASH,
+        hash
       );
 
       expect(transactions).toEqual([
@@ -74,9 +63,6 @@ describe("BlockChain", () => {
 
     describe("if add multiple transactions", () => {
       it("should be add pendingTransactions", () => {
-        const hash = faker.git.commitSha();
-        blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
-
         const sender = "gracefullight";
         const recipient = "github";
         blockChain.createNewTransaction(1000, sender, recipient);

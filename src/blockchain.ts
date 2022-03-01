@@ -5,7 +5,7 @@ export class Blockchain {
   private pendingTransactions: Transaction[] = [];
 
   public createNewBlock(
-    nonce: string,
+    nonce: number,
     previousBlockHash: string,
     hash: string
   ) {
@@ -38,11 +38,21 @@ export class Blockchain {
   public hashBlock(
     previousBlockHash: string,
     currentBlockData: Transaction[],
-    nonce: string
+    nonce: number
   ) {
     const dataAsString =
       previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
     const hash = sha256(dataAsString);
     return hash;
+  }
+
+  public proofOfWork(previousBlockHash: string, currentBlockData: Transaction[]) {
+    let nonce = 0;
+    let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+    while (hash.substring(0, 4) !== "0000") {
+      nonce++;
+      hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
+    }
+    return nonce;
   }
 }

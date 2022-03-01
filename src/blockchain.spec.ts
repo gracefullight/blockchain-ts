@@ -11,7 +11,7 @@ describe("BlockChain", () => {
   });
 
   describe("@createNewBlock", () => {
-    it("should be added genesis block", () => {
+    it("should be add genesis block", () => {
       const hash = faker.git.commitSha();
       const { timestamp, ...genesisBlockExceptTimestamp } =
         blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
@@ -27,7 +27,7 @@ describe("BlockChain", () => {
   });
 
   describe("@getLatestBlock", () => {
-    it("should be returned latest block", () => {
+    it("should be return latest block", () => {
       const hash = faker.git.commitSha();
       const secondBlockHash = faker.git.commitSha();
       blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
@@ -46,7 +46,7 @@ describe("BlockChain", () => {
   });
 
   describe("@createNewTransaction", () => {
-    it("should be added new transaction to the second (next) block", () => {
+    it("should be add new transaction to the second (next) block", () => {
       const hash = faker.git.commitSha();
       const secondBlockHash = faker.git.commitSha();
       blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
@@ -73,7 +73,7 @@ describe("BlockChain", () => {
     });
 
     describe("if add multiple transactions", () => {
-      it("should be added pendingTransactions", () => {
+      it("should be add pendingTransactions", () => {
         const hash = faker.git.commitSha();
         blockChain.createNewBlock(NONCE, GENESIS_BLOCK_HASH, hash);
 
@@ -101,6 +101,37 @@ describe("BlockChain", () => {
           },
         ]);
       });
+    });
+  });
+
+  describe("@hashBlock", () => {
+    it("should be return sha256 hash of block", () => {
+      const previousBlockHash = faker.git.commitSha();
+      const sender = "gracefullight";
+      const recipient = "github";
+      const blockHash = blockChain.hashBlock(
+        previousBlockHash,
+        [
+          {
+            amount: 1000,
+            sender,
+            recipient,
+          },
+          {
+            amount: 2000,
+            sender,
+            recipient,
+          },
+          {
+            amount: 3000,
+            sender,
+            recipient,
+          },
+        ],
+        NONCE
+      );
+
+      expect(blockHash).toMatch(/^[a-z0-9]{64}$/);
     });
   });
 });

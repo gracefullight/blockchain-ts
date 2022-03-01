@@ -1,4 +1,5 @@
 import type { Block, Transaction } from "./types";
+import { sha256 } from "./utils";
 export class Blockchain {
   private chain: Block[] = [];
   private pendingTransactions: Transaction[] = [];
@@ -32,5 +33,16 @@ export class Blockchain {
   ) {
     this.pendingTransactions.push({ amount, sender, recipient });
     return this.getLastBlock()["index"] + 1;
+  }
+
+  public hashBlock(
+    previousBlockHash: string,
+    currentBlockData: Transaction[],
+    nonce: string
+  ) {
+    const dataAsString =
+      previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
+    const hash = sha256(dataAsString);
+    return hash;
   }
 }

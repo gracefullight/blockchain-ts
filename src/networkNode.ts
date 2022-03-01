@@ -6,6 +6,7 @@ import { Blockchain } from "./blockchain";
 import { transactionDto } from "./dto";
 import { uuid } from "./utils";
 
+const port = process.argv[2];
 const blockChain = new Blockchain();
 
 const app = express();
@@ -54,6 +55,6 @@ app.get("/mine", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("server is running on port 3000");
+app.listen(port || 3000, () => {
+  console.log(`server is running on port ${port}`);
 });

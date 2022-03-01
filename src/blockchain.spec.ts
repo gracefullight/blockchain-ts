@@ -1,7 +1,7 @@
 import { Blockchain } from "./blockchain";
 import { faker } from "@faker-js/faker";
 
-const NONCE = "gracefullight";
+const NONCE = 0;
 const GENESIS_BLOCK_HASH = "0".repeat(32);
 
 describe("BlockChain", () => {
@@ -58,7 +58,7 @@ describe("BlockChain", () => {
       expect(nextBlockIndex).toBe(2);
 
       const { transactions } = blockChain.createNewBlock(
-        "gracefullight",
+        NONCE,
         hash,
         secondBlockHash
       );

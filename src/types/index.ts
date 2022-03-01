@@ -2,7 +2,7 @@ export interface Block {
   index: number;
   timestamp: number;
   transactions: Transaction[];
-  nonce: string;
+  nonce: number;
   hash: string;
   previousBlockHash: string;
 }

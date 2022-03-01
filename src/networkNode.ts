@@ -4,6 +4,7 @@ import helmet from "helmet";
 
 import { Blockchain } from "./blockchain";
 import { transactionDto } from "./dto";
+import { uuid } from "./utils";
 
 const blockChain = new Blockchain();
 
@@ -31,7 +32,27 @@ app.post(
   }
 );
 
-app.get("/mine", (req, res) => {});
+app.get("/mine", (req, res) => {
+  const { hash: previousBlockHash, index: lastBlockIndex } =
+    blockChain.getLastBlock();
+
+  const currentBlockData = {
+    transactions: blockChain.pendingTransactions,
+    index: lastBlockIndex + 1,
+  };
+
+  const nonce = blockChain.proofOfWork(previousBlockHash, currentBlockData);
+  const hash = blockChain.hashBlock(previousBlockHash, currentBlockData, nonce);
+  const newBlock = blockChain.createNewBlock(nonce, previousBlockHash, hash);
+
+  const nodeAddress = uuid().replace('-', '');
+  blockChain.createNewTransaction(12.5, "00", nodeAddress);
+
+  res.json({
+    note: "New block mined successfully",
+    block: newBlock,
+  });
+});
 
 app.listen(3000, () => {
   console.log("server is running on port 3000");

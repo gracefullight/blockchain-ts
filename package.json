@@ -3,7 +3,7 @@
   "packageManager": "yarn@3.2.0",
   "scripts": {
     "postinstall": "husky install",
-    "start": "nodemon src/api.ts",
+    "start": "nodemon src/networkNode.ts",
     "test": "jest"
   },
   "dependencies": {

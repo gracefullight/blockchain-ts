@@ -1,11 +1,11 @@
-import type { Block, Transaction } from "./types";
+import type { Block, BlockData, Transaction } from "./types";
 import { sha256 } from "./utils";
 
 export const GENESIS_BLOCK_HASH = "0".repeat(32);
 
 export class Blockchain {
   private chain: Block[] = [];
-  private pendingTransactions: Transaction[] = [];
+  pendingTransactions: Transaction[] = [];
 
   constructor() {
     this.createNewBlock(100, GENESIS_BLOCK_HASH, GENESIS_BLOCK_HASH);
@@ -44,7 +44,7 @@ export class Blockchain {
 
   public hashBlock(
     previousBlockHash: string,
-    currentBlockData: Transaction[],
+    currentBlockData: BlockData,
     nonce: number
   ) {
     const dataAsString =
@@ -53,10 +53,7 @@ export class Blockchain {
     return hash;
   }
 
-  public proofOfWork(
-    previousBlockHash: string,
-    currentBlockData: Transaction[]
-  ) {
+  public proofOfWork(previousBlockHash: string, currentBlockData: BlockData) {
     let nonce = 0;
     let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
     while (hash.substring(0, 4) !== "0000") {

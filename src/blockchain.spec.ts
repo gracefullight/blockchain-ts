@@ -14,7 +14,10 @@ describe("BlockChain", () => {
       const genesisBlock = Reflect.get(blockChain, "chain")[0];
 
       expect(genesisBlock).toHaveProperty("index", 1);
-      expect(genesisBlock).toHaveProperty("previousBlockHash", GENESIS_BLOCK_HASH);
+      expect(genesisBlock).toHaveProperty(
+        "previousBlockHash",
+        GENESIS_BLOCK_HASH
+      );
       expect(genesisBlock).toHaveProperty("hash", GENESIS_BLOCK_HASH);
     });
   });
@@ -97,23 +100,25 @@ describe("BlockChain", () => {
       const recipient = "github";
       const blockHash = blockChain.hashBlock(
         previousBlockHash,
-        [
-          {
-            amount: 1000,
-            sender,
-            recipient,
-          },
-          {
-            amount: 2000,
-            sender,
-            recipient,
-          },
-          {
-            amount: 3000,
-            sender,
-            recipient,
-          },
-        ],
+        {
+          transactions: [
+            {
+              amount: 1000,
+              sender,
+              recipient,
+            },
+            {
+              amount: 2000,
+              sender,
+              recipient,
+            },
+            {
+              amount: 3000,
+              sender,
+              recipient,
+            },
+          ],
+        },
         NONCE
       );
 

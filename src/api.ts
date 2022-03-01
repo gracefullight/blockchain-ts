@@ -16,7 +16,7 @@ app.get("/blockchain", (req, res) => {
 });
 
 app.post(
-  "/transcation",
+  "/transaction",
   checkSchema(transactionDto),
   (req: Request, res: Response) => {
     validationResult(req).throw();

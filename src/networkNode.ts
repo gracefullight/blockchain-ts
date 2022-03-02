@@ -8,9 +8,9 @@ import { Blockchain } from "./blockchain";
 import { nodeBulkDto, nodeDto, transactionDto } from "./dto";
 import { uuid } from "./utils";
 
-const port = process.argv[2];
+process.env.PORT = process.argv[2];
 const currentNodeUrl = process.argv[3];
-const blockChain = new Blockchain(currentNodeUrl || `http://localhost:${port}`);
+const blockChain = new Blockchain(currentNodeUrl || `http://localhost:${process.env.PORT}`);
 
 const app = express();
 app.use(helmet());
@@ -56,10 +56,6 @@ app.get("/mine", (req, res) => {
     note: "New block mined successfully",
     block: newBlock,
   });
-});
-
-app.listen(port || 3000, () => {
-  console.log(`server is running on port ${port}`);
 });
 
 app.post(
@@ -113,3 +109,5 @@ app.post(
     res.json({ note: "Bulk registration successful." });
   }
 );
+
+export default app;

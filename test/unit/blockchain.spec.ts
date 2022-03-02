@@ -1,12 +1,17 @@
-import { Blockchain, GENESIS_BLOCK_HASH } from "./blockchain";
 import { faker } from "@faker-js/faker";
+
+import { Blockchain, GENESIS_BLOCK_HASH } from "../../src/blockchain";
 
 const NONCE = 0;
 
 describe("BlockChain", () => {
   let blockChain: Blockchain;
   beforeEach(() => {
-    blockChain = new Blockchain();
+    blockChain = new Blockchain("http://localhost:3000");
+  });
+
+  it("should be initialize with nodeUrl", () => {
+    expect(blockChain.currentNodeUrl).toBe("http://localhost:3000");
   });
 
   describe("@createNewBlock", () => {

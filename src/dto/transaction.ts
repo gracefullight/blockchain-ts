@@ -1,6 +1,6 @@
 import type { Schema } from "express-validator";
 
-export const transactionDto: Schema = {
+const defaultTransactionDto: Schema = {
   amount: {
     in: "body",
     isInt: true,
@@ -13,4 +13,17 @@ export const transactionDto: Schema = {
     in: "body",
     isString: true,
   },
+};
+
+export const transactionDto: Schema = {
+  ...defaultTransactionDto,
+  transactionId: {
+    in: "body",
+    isString: true,
+    optional: true,
+  },
+};
+
+export const transactionBroadcastDto: Schema = {
+  ...defaultTransactionDto,
 };

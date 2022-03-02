@@ -1,16 +1,19 @@
 import axios from "axios";
 import express, { Request, Response } from "express";
 import h from "express-async-handler";
-import { checkSchema, validationResult } from "express-validator";
+import { checkSchema } from "express-validator";
 import helmet from "helmet";
 
 import { Blockchain } from "./blockchain";
-import { nodeBulkDto, nodeDto, transactionDto } from "./dto";
+import { nodeBulkDto, nodeDto, transactionDto, transactionBroadcastDto } from "./dto";
 import { uuid } from "./utils";
+import type { Transaction, TransactionDto, } from "./types";
 
 process.env.PORT = process.argv[2];
 const currentNodeUrl = process.argv[3];
-const blockChain = new Blockchain(currentNodeUrl || `http://localhost:${process.env.PORT}`);
+const blockChain = new Blockchain(
+  currentNodeUrl || `http://localhost:${process.env.PORT}`
+);
 
 const app = express();
 app.use(helmet());
@@ -24,16 +27,39 @@ app.post(
   "/transaction",
   checkSchema(transactionDto),
   (req: Request, res: Response) => {
-    validationResult(req).throw();
+    const { amount, sender, recipient, transactionId } =
+      req.body as Transaction;
 
-    const blockIndex = blockChain.createNewTransaction(
-      req.body.amount,
-      req.body.sender,
-      req.body.recipient
-    );
+    const blockIndex = blockChain.addTransactionToPendingTransactions({
+      amount,
+      sender,
+      recipient,
+      transactionId,
+    });
 
     res.json({ note: `Transaction will be added in Block ${blockIndex}` });
   }
+);
+
+app.post(
+  "/transaction/broadcast",
+  checkSchema(transactionBroadcastDto),
+  h(async (req: Request, res: Response) => {
+    const { amount, sender, recipient } = req.body as TransactionDto;
+    const newTransaction = blockChain.createNewTransaction(
+      amount,
+      sender,
+      recipient
+    );
+
+    blockChain.addTransactionToPendingTransactions(newTransaction);
+    const p = blockChain.networkNodes.map((nodeUrl) =>
+      axios.post(`${nodeUrl}/transaction`, newTransaction)
+    );
+    await Promise.all(p);
+
+    res.json({ note: "Transaction created and broadcast successfully." });
+  })
 );
 
 app.get("/mine", (req, res) => {

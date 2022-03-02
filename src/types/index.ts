@@ -14,4 +14,6 @@ export interface Transaction {
   transactionId: string;
 }
 
+export type TransactionDto = Omit<Transaction, "transactionId">;
+
 export type BlockData = Partial<Block>;

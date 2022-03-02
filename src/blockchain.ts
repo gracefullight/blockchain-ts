@@ -1,5 +1,5 @@
 import type { Block, BlockData, Transaction } from "./types";
-import { sha256 } from "./utils";
+import { sha256, uuid } from "./utils";
 
 export const GENESIS_BLOCK_HASH = "0".repeat(32);
 
@@ -41,8 +41,14 @@ export class Blockchain {
     sender: string,
     recipient: string
   ) {
-    this.pendingTransactions.push({ amount, sender, recipient });
-    return this.getLastBlock()["index"] + 1;
+    const newTransaction = {
+      amount,
+      sender,
+      recipient,
+      transactionId: uuid().replaceAll("-", ""),
+    };
+    this.pendingTransactions.push(newTransaction);
+    return newTransaction;
   }
 
   public hashBlock(

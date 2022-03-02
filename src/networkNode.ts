@@ -49,7 +49,7 @@ app.get("/mine", (req, res) => {
   const hash = blockChain.hashBlock(previousBlockHash, currentBlockData, nonce);
   const newBlock = blockChain.createNewBlock(nonce, previousBlockHash, hash);
 
-  const nodeAddress = uuid().replace("-", "");
+  const nodeAddress = uuid().replaceAll("-", "");
   blockChain.createNewTransaction(12.5, "00", nodeAddress);
 
   res.json({

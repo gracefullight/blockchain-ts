@@ -11,6 +11,7 @@ export interface Transaction {
   amount: number;
   sender: string;
   recipient: string;
+  transactionId: string;
 }
 
 export type BlockData = Partial<Block>;

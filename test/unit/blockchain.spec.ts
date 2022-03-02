@@ -47,12 +47,16 @@ describe("BlockChain", () => {
   describe("@createNewTransaction", () => {
     it("should be add new transaction to the second (next) block", () => {
       const hash = faker.git.commitSha();
-      const nextBlockIndex = blockChain.createNewTransaction(
+      const transaction = blockChain.createNewTransaction(
         1000,
         "gracefullight",
         "github"
       );
-      expect(nextBlockIndex).toBe(2);
+
+      expect(transaction).toHaveProperty("amount");
+      expect(transaction).toHaveProperty("sender");
+      expect(transaction).toHaveProperty("recipient");
+      expect(transaction).toHaveProperty("transactionId");
 
       const { transactions } = blockChain.createNewBlock(
         NONCE,
@@ -60,13 +64,7 @@ describe("BlockChain", () => {
         hash
       );
 
-      expect(transactions).toEqual([
-        {
-          amount: 1000,
-          sender: "gracefullight",
-          recipient: "github",
-        },
-      ]);
+      expect(transactions).toHaveLength(1);
     });
 
     describe("if add multiple transactions", () => {
@@ -77,23 +75,7 @@ describe("BlockChain", () => {
         blockChain.createNewTransaction(2000, sender, recipient);
         blockChain.createNewTransaction(3000, sender, recipient);
 
-        expect(Reflect.get(blockChain, "pendingTransactions")).toEqual([
-          {
-            amount: 1000,
-            sender,
-            recipient,
-          },
-          {
-            amount: 2000,
-            sender,
-            recipient,
-          },
-          {
-            amount: 3000,
-            sender,
-            recipient,
-          },
-        ]);
+        expect(Reflect.get(blockChain, "pendingTransactions")).toHaveLength(3);
       });
     });
   });
@@ -111,16 +93,19 @@ describe("BlockChain", () => {
               amount: 1000,
               sender,
               recipient,
+              transactionId: faker.datatype.uuid().replaceAll("-", ""),
             },
             {
               amount: 2000,
               sender,
               recipient,
+              transactionId: faker.datatype.uuid().replaceAll("-", ""),
             },
             {
               amount: 3000,
               sender,
               recipient,
+              transactionId: faker.datatype.uuid().replaceAll("-", ""),
             },
           ],
         },

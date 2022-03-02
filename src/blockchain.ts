@@ -6,9 +6,12 @@ export const GENESIS_BLOCK_HASH = "0".repeat(32);
 export class Blockchain {
   private chain: Block[] = [];
   pendingTransactions: Transaction[] = [];
+  networkNodes: string[] = [];
+  currentNodeUrl: string;
 
-  constructor() {
+  constructor(currentNodeUrl: string) {
     this.createNewBlock(100, GENESIS_BLOCK_HASH, GENESIS_BLOCK_HASH);
+    this.currentNodeUrl = currentNodeUrl;
   }
 
   public createNewBlock(

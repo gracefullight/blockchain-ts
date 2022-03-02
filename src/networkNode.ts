@@ -1,13 +1,16 @@
+import axios from "axios";
 import express, { Request, Response } from "express";
+import h from "express-async-handler";
 import { checkSchema, validationResult } from "express-validator";
 import helmet from "helmet";
 
 import { Blockchain } from "./blockchain";
-import { transactionDto } from "./dto";
+import { nodeBulkDto, nodeDto, transactionDto } from "./dto";
 import { uuid } from "./utils";
 
 const port = process.argv[2];
-const blockChain = new Blockchain();
+const currentNodeUrl = process.argv[3];
+const blockChain = new Blockchain(currentNodeUrl || `http://localhost:${port}`);
 
 const app = express();
 app.use(helmet());
@@ -46,7 +49,7 @@ app.get("/mine", (req, res) => {
   const hash = blockChain.hashBlock(previousBlockHash, currentBlockData, nonce);
   const newBlock = blockChain.createNewBlock(nonce, previousBlockHash, hash);
 
-  const nodeAddress = uuid().replace('-', '');
+  const nodeAddress = uuid().replace("-", "");
   blockChain.createNewTransaction(12.5, "00", nodeAddress);
 
   res.json({
@@ -58,3 +61,55 @@ app.get("/mine", (req, res) => {
 app.listen(port || 3000, () => {
   console.log(`server is running on port ${port}`);
 });
+
+app.post(
+  "/register-and-broadcast-node",
+  checkSchema(nodeDto),
+  h(async (req: Request, res: Response) => {
+    const newNodeUrl = req.body.newNodeUrl;
+    if (!blockChain.networkNodes.includes(newNodeUrl)) {
+      blockChain.networkNodes.push(newNodeUrl);
+    }
+
+    const p = blockChain.networkNodes.map((nodeUrl: string) =>
+      axios.post(nodeUrl + "/register-node", { newNodeUrl })
+    );
+
+    await Promise.all(p);
+    res.json({ note: "New node registered with network successfully" });
+  })
+);
+
+app.post(
+  "/register-node",
+  checkSchema(nodeDto),
+  (req: Request, res: Response) => {
+    const newNodeUrl = req.body.newNodeUrl;
+    if (
+      !blockChain.networkNodes.includes(newNodeUrl) &&
+      blockChain.currentNodeUrl !== newNodeUrl
+    ) {
+      blockChain.networkNodes.push(newNodeUrl);
+    }
+
+    res.json({ note: "New node registered successfully" });
+  }
+);
+
+app.post(
+  "/register-node-bulk",
+  checkSchema(nodeBulkDto),
+  (req: Request, res: Response) => {
+    const allNetworkNodes = req.body.allNetworkNodes;
+    allNetworkNodes.forEach((nodeUrl: string) => {
+      if (
+        !blockChain.networkNodes.includes(nodeUrl) &&
+        nodeUrl !== blockChain.currentNodeUrl
+      ) {
+        blockChain.networkNodes.push(nodeUrl);
+      }
+    });
+
+    res.json({ note: "Bulk registration successful." });
+  }
+);

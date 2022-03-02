@@ -41,8 +41,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],\
             ["@types/jest", "npm:27.4.1"],\
             ["@types/node", "npm:17.0.21"],\
+            ["axios", "npm:0.26.0"],\
             ["concurrently", "npm:7.0.0"],\
             ["express", "npm:4.17.3"],\
+            ["express-async-handler", "npm:1.2.0"],\
             ["express-validator", "npm:6.14.0"],\
             ["helmet", "npm:5.0.2"],\
             ["husky", "npm:7.0.4"],\
@@ -2140,6 +2142,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["axios", [\
+        ["npm:0.26.0", {\
+          "packageLocation": "./.yarn/cache/axios-npm-0.26.0-ae9d5291c9-d7a8b898f4.zip/node_modules/axios/",\
+          "packageDependencies": [\
+            ["axios", "npm:0.26.0"],\
+            ["follow-redirects", "virtual:ae9d5291c97ae0cacb5775381cccfce07fa49ffc443f3fdd7488fb1a1655b5d1c7927e5118e33808de5d3fd89b9e27b3eadf3d56f2cf83b8ab953c0679aed818#npm:1.14.9"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["babel-jest", [\
         ["npm:27.5.1", {\
           "packageLocation": "./.yarn/cache/babel-jest-npm-27.5.1-f9f56b9874-4e93e6e9fb.zip/node_modules/babel-jest/",\
@@ -2309,8 +2321,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],\
             ["@types/jest", "npm:27.4.1"],\
             ["@types/node", "npm:17.0.21"],\
+            ["axios", "npm:0.26.0"],\
             ["concurrently", "npm:7.0.0"],\
             ["express", "npm:4.17.3"],\
+            ["express-async-handler", "npm:1.2.0"],\
             ["express-validator", "npm:6.14.0"],\
             ["helmet", "npm:5.0.2"],\
             ["husky", "npm:7.0.4"],\
@@ -3504,6 +3518,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["express-async-handler", [\
+        ["npm:1.2.0", {\
+          "packageLocation": "./.yarn/cache/express-async-handler-npm-1.2.0-475fa8a2fc-ab9ebba8b8.zip/node_modules/express-async-handler/",\
+          "packageDependencies": [\
+            ["express-async-handler", "npm:1.2.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["express-validator", [\
         ["npm:6.14.0", {\
           "packageLocation": "./.yarn/cache/express-validator-npm-6.14.0-34a160ed56-e43ba1f18a.zip/node_modules/express-validator/",\
@@ -3594,6 +3617,28 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["find-up", "npm:5.0.0"],\
             ["locate-path", "npm:6.0.0"],\
             ["path-exists", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["follow-redirects", [\
+        ["npm:1.14.9", {\
+          "packageLocation": "./.yarn/cache/follow-redirects-npm-1.14.9-522f191631-f5982e0eb4.zip/node_modules/follow-redirects/",\
+          "packageDependencies": [\
+            ["follow-redirects", "npm:1.14.9"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:ae9d5291c97ae0cacb5775381cccfce07fa49ffc443f3fdd7488fb1a1655b5d1c7927e5118e33808de5d3fd89b9e27b3eadf3d56f2cf83b8ab953c0679aed818#npm:1.14.9", {\
+          "packageLocation": "./.yarn/__virtual__/follow-redirects-virtual-0541b7cf28/0/cache/follow-redirects-npm-1.14.9-522f191631-f5982e0eb4.zip/node_modules/follow-redirects/",\
+          "packageDependencies": [\
+            ["follow-redirects", "virtual:ae9d5291c97ae0cacb5775381cccfce07fa49ffc443f3fdd7488fb1a1655b5d1c7927e5118e33808de5d3fd89b9e27b3eadf3d56f2cf83b8ab953c0679aed818#npm:1.14.9"],\
+            ["@types/debug", null],\
+            ["debug", null]\
+          ],\
+          "packagePeers": [\
+            "@types/debug",\
+            "debug"\
           ],\
           "linkType": "HARD"\
         }]\

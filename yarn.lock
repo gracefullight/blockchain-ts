@@ -1606,6 +1606,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"axios@npm:^0.26.0":
+  version: 0.26.0
+  resolution: "axios@npm:0.26.0"
+  dependencies:
+    follow-redirects: ^1.14.8
+  checksum: d7a8b898f4157bedeb2e06c03b16133b91b354c041205bea732ce58b7a21f373d22057b0eea0d482838145ce6ff482b359750d9bcb8dd19d45e3928e3c65c280
+  languageName: node
+  linkType: hard
+
 "babel-jest@npm:^27.5.1":
   version: 27.5.1
   resolution: "babel-jest@npm:27.5.1"
@@ -1709,8 +1718,10 @@ __metadata:
     "@types/express": ^4.17.13
     "@types/jest": ^27.4.1
     "@types/node": ^17.0.21
+    axios: ^0.26.0
     concurrently: ^7.0.0
     express: ^4.17.3
+    express-async-handler: ^1.2.0
     express-validator: ^6.14.0
     helmet: ^5.0.2
     husky: ^7.0.4
@@ -2684,6 +2695,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"express-async-handler@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "express-async-handler@npm:1.2.0"
+  checksum: ab9ebba8b8366954cb06ab87cf91fc974428993a97940c499114134ce33144f5d1ffad380e60a53a1569c3cd9501cb209e1fb57b1845a4fc8ff449937598f2f1
+  languageName: node
+  linkType: hard
+
 "express-validator@npm:^6.14.0":
   version: 6.14.0
   resolution: "express-validator@npm:6.14.0"
@@ -2803,6 +2821,16 @@ __metadata:
     locate-path: ^6.0.0
     path-exists: ^4.0.0
   checksum: 07955e357348f34660bde7920783204ff5a26ac2cafcaa28bace494027158a97b9f56faaf2d89a6106211a8174db650dd9f503f9c0d526b1202d5554a00b9095
+  languageName: node
+  linkType: hard
+
+"follow-redirects@npm:^1.14.8":
+  version: 1.14.9
+  resolution: "follow-redirects@npm:1.14.9"
+  peerDependenciesMeta:
+    debug:
+      optional: true
+  checksum: f5982e0eb481818642492d3ca35a86989c98af1128b8e1a62911a3410621bc15d2b079e8170b35b19d3bdee770b73ed431a257ed86195af773771145baa57845
   languageName: node
   linkType: hard
 

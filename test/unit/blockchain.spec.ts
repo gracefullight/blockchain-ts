@@ -3,6 +3,8 @@ import { faker } from "@faker-js/faker";
 import { Blockchain, GENESIS_BLOCK_HASH } from "../../src/blockchain";
 
 const NONCE = 0;
+const SENDER = "gracefullight";
+const RECIPIENT = "github";
 
 describe("BlockChain", () => {
   let blockChain: Blockchain;
@@ -69,13 +71,11 @@ describe("BlockChain", () => {
 
     describe("if add multiple transactions", () => {
       it("should be add pendingTransactions", () => {
-        const sender = "gracefullight";
-        const recipient = "github";
-        blockChain.createNewTransaction(1000, sender, recipient);
-        blockChain.createNewTransaction(2000, sender, recipient);
-        blockChain.createNewTransaction(3000, sender, recipient);
+        blockChain.createNewTransaction(1000, SENDER, RECIPIENT);
+        blockChain.createNewTransaction(2000, SENDER, RECIPIENT);
+        blockChain.createNewTransaction(3000, SENDER, RECIPIENT);
 
-        expect(Reflect.get(blockChain, "pendingTransactions")).toHaveLength(3);
+        expect(blockChain.pendingTransactions).toHaveLength(3);
       });
     });
   });
@@ -83,28 +83,26 @@ describe("BlockChain", () => {
   describe("@hashBlock", () => {
     it("should be return sha256 hash of block", () => {
       const previousBlockHash = faker.git.commitSha();
-      const sender = "gracefullight";
-      const recipient = "github";
       const blockHash = blockChain.hashBlock(
         previousBlockHash,
         {
           transactions: [
             {
               amount: 1000,
-              sender,
-              recipient,
+              sender: SENDER,
+              recipient: RECIPIENT,
               transactionId: faker.datatype.uuid().replaceAll("-", ""),
             },
             {
               amount: 2000,
-              sender,
-              recipient,
+              sender: SENDER,
+              recipient: RECIPIENT,
               transactionId: faker.datatype.uuid().replaceAll("-", ""),
             },
             {
               amount: 3000,
-              sender,
-              recipient,
+              sender: SENDER,
+              recipient: RECIPIENT,
               transactionId: faker.datatype.uuid().replaceAll("-", ""),
             },
           ],
@@ -113,6 +111,20 @@ describe("BlockChain", () => {
       );
 
       expect(blockHash).toMatch(/^[a-z0-9]{64}$/);
+    });
+  });
+
+  describe('@addTransactionToPendingTransactions', () => {
+    it('should be add pendingTransactions', () => { 
+      const newBlockIndex = blockChain.addTransactionToPendingTransactions({
+        amount: 1000,
+        sender: SENDER,
+        recipient: RECIPIENT,
+        transactionId: faker.datatype.uuid().replaceAll('-', ''),
+      });
+
+      expect(newBlockIndex).toBe(2);
+      expect(blockChain.pendingTransactions).toHaveLength(1);
     });
   });
 });

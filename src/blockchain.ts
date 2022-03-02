@@ -71,4 +71,9 @@ export class Blockchain {
     }
     return nonce;
   }
+
+  public addTransactionToPendingTransactions(transaction: Transaction) {
+    this.pendingTransactions.push(transaction);
+    return this.getLastBlock()["index"] + 1;
+  }
 }

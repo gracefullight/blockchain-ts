@@ -5,9 +5,15 @@ import { checkSchema } from "express-validator";
 import helmet from "helmet";
 
 import { Blockchain } from "./blockchain";
-import { nodeBulkDto, nodeDto, transactionDto, transactionBroadcastDto } from "./dto";
+import {
+  nodeBulkDto,
+  nodeDto,
+  transactionDto,
+  transactionBroadcastDto,
+  blockDto,
+} from "./dto";
 import { uuid } from "./utils";
-import type { Transaction, TransactionDto, } from "./types";
+import type { Block, Transaction, TransactionDto } from "./types";
 
 process.env.PORT = process.argv[2];
 const currentNodeUrl = process.argv[3];
@@ -62,27 +68,43 @@ app.post(
   })
 );
 
-app.get("/mine", (req, res) => {
-  const { hash: previousBlockHash, index: lastBlockIndex } =
-    blockChain.getLastBlock();
+app.get(
+  "/mine",
+  h(async (req, res) => {
+    const { hash: previousBlockHash, index: lastBlockIndex } =
+      blockChain.getLastBlock();
 
-  const currentBlockData = {
-    transactions: blockChain.pendingTransactions,
-    index: lastBlockIndex + 1,
-  };
+    const currentBlockData = {
+      transactions: blockChain.pendingTransactions,
+      index: lastBlockIndex + 1,
+    };
 
-  const nonce = blockChain.proofOfWork(previousBlockHash, currentBlockData);
-  const hash = blockChain.hashBlock(previousBlockHash, currentBlockData, nonce);
-  const newBlock = blockChain.createNewBlock(nonce, previousBlockHash, hash);
+    const nonce = blockChain.proofOfWork(previousBlockHash, currentBlockData);
+    const hash = blockChain.hashBlock(
+      previousBlockHash,
+      currentBlockData,
+      nonce
+    );
+    const newBlock = blockChain.createNewBlock(nonce, previousBlockHash, hash);
 
-  const nodeAddress = uuid().replaceAll("-", "");
-  blockChain.createNewTransaction(12.5, "00", nodeAddress);
+    const p = blockChain.networkNodes.map((nodeUrl) =>
+      axios.post(`${nodeUrl}/receive-new-block`, { newBlock })
+    );
+    await Promise.all(p);
 
-  res.json({
-    note: "New block mined successfully",
-    block: newBlock,
-  });
-});
+    const nodeAddress = uuid().replaceAll("-", "");
+    await axios.post(`${blockChain.currentNodeUrl}/trasaction/broadcast`, {
+      amount: 12.5,
+      sender: "00",
+      recipient: nodeAddress,
+    });
+
+    res.json({
+      note: "New block mined successfully",
+      block: newBlock,
+    });
+  })
+);
 
 app.post(
   "/register-and-broadcast-node",
@@ -133,6 +155,26 @@ app.post(
     });
 
     res.json({ note: "Bulk registration successful." });
+  }
+);
+
+app.post(
+  "/receive-new-block",
+  checkSchema(blockDto),
+  (req: Request, res: Response) => {
+    const newBlock = req.body.newBlock as Block;
+    const lastBlock = blockChain.getLastBlock();
+
+    if (
+      lastBlock.hash === newBlock.previousBlockHash &&
+      lastBlock.index + 1 === newBlock.index
+    ) {
+      blockChain.chain.push(newBlock);
+      blockChain.pendingTransactions = [];
+      res.json({ note: "New block received and accepted.", newBlock });
+    } else {
+      res.json({ note: "New block rejected.", newBlock });
+    }
   }
 );
 

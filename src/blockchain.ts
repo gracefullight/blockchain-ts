@@ -4,7 +4,7 @@ import { sha256, uuid } from "./utils";
 export const GENESIS_BLOCK_HASH = "0".repeat(32);
 
 export class Blockchain {
-  private chain: Block[] = [];
+  chain: Block[] = [];
   pendingTransactions: Transaction[] = [];
   networkNodes: string[] = [];
   currentNodeUrl: string;

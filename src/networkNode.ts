@@ -93,7 +93,7 @@ app.get(
     await Promise.all(p);
 
     const nodeAddress = uuid().replaceAll("-", "");
-    await axios.post(`${blockChain.currentNodeUrl}/trasaction/broadcast`, {
+    await axios.post(`${blockChain.currentNodeUrl}/transaction/broadcast`, {
       amount: 12.5,
       sender: "00",
       recipient: nodeAddress,
@@ -120,6 +120,10 @@ app.post(
     );
 
     await Promise.all(p);
+    await axios.post(`${newNodeUrl}/register-nodes-bulk`, {
+      allNetworkNodes: [...blockChain.networkNodes, blockChain.currentNodeUrl],
+    });
+
     res.json({ note: "New node registered with network successfully" });
   })
 );
@@ -141,7 +145,7 @@ app.post(
 );
 
 app.post(
-  "/register-node-bulk",
+  "/register-nodes-bulk",
   checkSchema(nodeBulkDto),
   (req: Request, res: Response) => {
     const allNetworkNodes = req.body.allNetworkNodes;
@@ -176,6 +180,48 @@ app.post(
       res.json({ note: "New block rejected.", newBlock });
     }
   }
+);
+
+app.get(
+  "/consensus",
+  h(async (req: Request, res: Response) => {
+    const p = blockChain.networkNodes.map((nodeUrl) =>
+      axios.get<Blockchain>(`${nodeUrl}/blockchain`)
+    );
+
+    const currentChainLength = blockChain.chain.length;
+    let maxChainLength = currentChainLength;
+    let newLongestChain = null;
+    let newPendingTransactions: Transaction[] = [];
+
+    const responses = await Promise.all(p);
+    responses
+      .map(({ data }) => data)
+      .forEach((chain) => {
+        if (chain.chain.length > maxChainLength) {
+          maxChainLength = chain.chain.length;
+          newLongestChain = chain.chain;
+          newPendingTransactions = chain.pendingTransactions;
+        }
+      });
+
+    if (
+      !newLongestChain ||
+      (newLongestChain && !blockChain.chainIsValid(newLongestChain))
+    ) {
+      res.json({
+        note: "Current chain has not been replaced.",
+        chain: blockChain.chain,
+      });
+    } else {
+      blockChain.chain = newLongestChain;
+      blockChain.pendingTransactions = newPendingTransactions;
+      res.json({
+        note: "This chain has been replaced.",
+        chain: blockChain.chain,
+      });
+    }
+  })
 );
 
 export default app;

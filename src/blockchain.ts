@@ -76,4 +76,38 @@ export class Blockchain {
     this.pendingTransactions.push(transaction);
     return this.getLastBlock()["index"] + 1;
   }
+
+  public chainIsValid(blockchain: Block[]) {
+    const genesisBlock = blockchain[0];
+    const correctNonce = genesisBlock.nonce === 100;
+    const correctPreviousBlockHash = genesisBlock.previousBlockHash === GENESIS_BLOCK_HASH;
+    const correctHash = genesisBlock.hash === GENESIS_BLOCK_HASH;
+    const correctTransactions = genesisBlock.transactions.length === 0;
+
+    if (!correctNonce || !correctPreviousBlockHash || !correctHash || !correctTransactions) {
+      return false;
+    }
+
+    
+    let validChain = true;
+    for (let i = 1; i < blockchain.length; i++) {
+      const currentBlock = blockchain[i];
+      const previousBlock = blockchain[i - 1];
+      const blockHash = this.hashBlock(
+        previousBlock.hash,
+        { transactions: currentBlock.transactions, index: currentBlock.index },
+        currentBlock.nonce
+      );
+      if (blockHash.substring(0, 4) !== "0000") {
+        validChain = false;
+        break;
+      }
+      if (currentBlock.previousBlockHash !== previousBlock.hash) {
+        validChain = false;
+        break;
+      }
+    }
+
+    return validChain;
+  }
 }

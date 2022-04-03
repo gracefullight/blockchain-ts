@@ -80,15 +80,20 @@ export class Blockchain {
   public chainIsValid(blockchain: Block[]) {
     const genesisBlock = blockchain[0];
     const correctNonce = genesisBlock.nonce === 100;
-    const correctPreviousBlockHash = genesisBlock.previousBlockHash === GENESIS_BLOCK_HASH;
+    const correctPreviousBlockHash =
+      genesisBlock.previousBlockHash === GENESIS_BLOCK_HASH;
     const correctHash = genesisBlock.hash === GENESIS_BLOCK_HASH;
     const correctTransactions = genesisBlock.transactions.length === 0;
 
-    if (!correctNonce || !correctPreviousBlockHash || !correctHash || !correctTransactions) {
+    if (
+      !correctNonce ||
+      !correctPreviousBlockHash ||
+      !correctHash ||
+      !correctTransactions
+    ) {
       return false;
     }
 
-    
     let validChain = true;
     for (let i = 1; i < blockchain.length; i++) {
       const currentBlock = blockchain[i];
@@ -109,5 +114,59 @@ export class Blockchain {
     }
 
     return validChain;
+  }
+
+  public getBlock(blockHash: string) {
+    const correctBlock = this.chain.find((block) => block.hash === blockHash);
+    return correctBlock;
+  }
+
+  public getTransaction(transactionId: string) {
+    let block: Block | undefined;
+    let transaction: Transaction | undefined;
+    this.chain.forEach((_block) => {
+      const _transaction = _block.transactions.find(
+        (transaction) => transaction.transactionId === transactionId
+      );
+
+      if (_transaction) {
+        block = _block;
+        transaction = _transaction;
+        return;
+      }
+    });
+
+    return {
+      block,
+      transaction,
+    };
+  }
+
+  public getAddressData(address: string) {
+    const addressTransactions: Transaction[] = [];
+    this.chain.forEach((block) => {
+      block.transactions.forEach((transaction) => {
+        if (
+          transaction.sender === address ||
+          transaction.recipient === address
+        ) {
+          addressTransactions.push(transaction);
+        }
+      });
+    });
+
+    let addressBalance = 0;
+    addressTransactions.forEach((transaction) => {
+      if (transaction.sender === address) {
+        addressBalance -= transaction.amount;
+      } else if (transaction.recipient === address) {
+        addressBalance += transaction.amount;
+      }
+    });
+
+    return {
+      addressTransactions,
+      addressBalance,
+    };
   }
 }

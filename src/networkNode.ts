@@ -184,7 +184,7 @@ app.post(
 
 app.get(
   "/consensus",
-  h(async (req: Request, res: Response) => {
+  h(async (_: Request, res: Response) => {
     const p = blockChain.networkNodes.map((nodeUrl) =>
       axios.get<Blockchain>(`${nodeUrl}/blockchain`)
     );
@@ -223,5 +223,27 @@ app.get(
     }
   })
 );
+
+app.get("/block/:blockHash", (req, res) => {
+  const blockHash = req.params.blockHash;
+  const block = blockChain.getBlock(blockHash);
+  res.json({ block });
+});
+
+app.get("/transaction/:transactionId", (req, res) => {
+  const transactionId = req.params.transactionId;
+  const { transaction, block } = blockChain.getTransaction(transactionId);
+  res.json({ transaction, block });
+});
+
+app.get("/address/:address", (req, res) => {
+  const address = req.params.address;
+  const addressData = blockChain.getAddressData(address);
+  res.json({ addressData });
+});
+
+app.get("/block-explorer", (_, res) => {
+  res.sendFile("./block-explorer/index.html", { root: __dirname });
+});
 
 export default app;

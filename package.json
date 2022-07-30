@@ -1,6 +1,9 @@
 {
   "name": "blockchain",
   "packageManager": "yarn@3.2.2",
+  "engines": {
+    "node": "16"
+  },
   "scripts": {
     "postinstall": "husky install",
     "start": "concurrently \"yarn start:node 3001\" \"yarn start:node 3002\" \"yarn start:node 3003\" \"yarn start:node 3004\" \"yarn start:node 3005\"",

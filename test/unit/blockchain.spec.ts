@@ -91,19 +91,19 @@ describe("BlockChain", () => {
               amount: 1000,
               sender: SENDER,
               recipient: RECIPIENT,
-              transactionId: faker.datatype.uuid().replaceAll("-", ""),
+              transactionId: faker.string.uuid().replaceAll("-", ""),
             },
             {
               amount: 2000,
               sender: SENDER,
               recipient: RECIPIENT,
-              transactionId: faker.datatype.uuid().replaceAll("-", ""),
+              transactionId: faker.string.uuid().replaceAll("-", ""),
             },
             {
               amount: 3000,
               sender: SENDER,
               recipient: RECIPIENT,
-              transactionId: faker.datatype.uuid().replaceAll("-", ""),
+              transactionId: faker.string.uuid().replaceAll("-", ""),
             },
           ],
         },
@@ -120,7 +120,7 @@ describe("BlockChain", () => {
         amount: 1000,
         sender: SENDER,
         recipient: RECIPIENT,
-        transactionId: faker.datatype.uuid().replaceAll("-", ""),
+        transactionId: faker.string.uuid().replaceAll("-", ""),
       });
 
       expect(newBlockIndex).toBe(2);

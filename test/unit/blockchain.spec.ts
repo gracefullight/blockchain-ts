@@ -114,13 +114,13 @@ describe("BlockChain", () => {
     });
   });
 
-  describe('@addTransactionToPendingTransactions', () => {
-    it('should be add pendingTransactions', () => { 
+  describe("@addTransactionToPendingTransactions", () => {
+    it("should be add pendingTransactions", () => {
       const newBlockIndex = blockChain.addTransactionToPendingTransactions({
         amount: 1000,
         sender: SENDER,
         recipient: RECIPIENT,
-        transactionId: faker.datatype.uuid().replaceAll('-', ''),
+        transactionId: faker.datatype.uuid().replaceAll("-", ""),
       });
 
       expect(newBlockIndex).toBe(2);

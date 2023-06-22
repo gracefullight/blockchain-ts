@@ -6,14 +6,14 @@ import helmet from "helmet";
 
 import { Blockchain } from "./blockchain";
 import {
+  blockDto,
   nodeBulkDto,
   nodeDto,
-  transactionDto,
   transactionBroadcastDto,
-  blockDto,
+  transactionDto,
 } from "./dto";
-import { uuid } from "./utils";
 import type { Block, Transaction, TransactionDto } from "./types";
+import { uuid } from "./utils";
 
 process.env.PORT = process.argv[2];
 const currentNodeUrl = process.argv[3];
